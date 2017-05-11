@@ -1,4 +1,8 @@
 const User = require('../models/user');
+const Thread = require('../models/thread');
+const Vote = require('../models/vote');
+const bcrypt = require('bcrypt');
+let saltRounds = 10;
 
 let userControl = {
   showAll: function(req, res) {
@@ -11,7 +15,7 @@ let userControl = {
     });
   },
   showById: function(req, res) {
-    User.findOne({'username': req.params.user}).populate(['threads', 'answers', 'votes']).exec((err, user) => {
+    User.findById(req.params.id).populate(['threads', 'answers', 'votes']).exec((err, user) => {
       if (err) {
         res.send(err);
       } else {
@@ -27,6 +31,7 @@ let userControl = {
         let threads = req.body.threads || user.threads;
         let answers = req.body.answers || user.answers;
         let votes = req.body.votes || user.votes;
+        let comments = req.body.comments || user.comments;
         User.update({_id: req.params.id}, {$set:{
           'username': user.username,
           'email': user.email,
@@ -61,14 +66,55 @@ let userControl = {
     });
   },
   register: function(req, res) {
-    if(req.status === 'failed') {
-      console.log(req.message);
-      res.send({status: req.status, message: req.message});
-    } else {
-      res.send({status: req.status, message: req.message, user: req.user});
-    }
+      let username = req.body.username;
+      let email = req.body.email;
+      let password = req.body.password;
+      User.findOne({'local.username': username}, function(err, user) {
+        if(err) {
+          let response = {
+            status: 'failed',
+            message: 'error in finding the user in database'
+          };
+          res.send(response);
+        }
+        if(user) {
+          let response = {
+            status: 'failed',
+            message: 'username is already taken'
+          };
+          res.send(respose);
+        } else {
+          let newUser = new User();
+          newUser.username = username;
+          newUser.email = email;
+          bcrypt.hash(password, saltRounds, function(err, hashed) {
+            if(err) {
+              let response = {
+                status: 'failed',
+                message: 'error hashing password'
+              };
+              res.send(response);
+            }
+            newUser.password = hashed;
+            newUser.save((err) => {
+              if(err) {
+                let response = {
+                  status: 'failed',
+                  message: 'error in saving user'
+                };
+                res.send(response);
+              }
+              let response = {
+                status: 'sucess',
+                message: 'user is successfully registered'
+              };
+              res.send(response);
+            });
+          });
+        }
+      });
   },
-  localSignin: function(req, res) {
+  signIn: function(req, res) {
     console.log('status: ', req.user.status);
     console.log('message: ', req.user.message);
     if(req.user.status === "failed") {

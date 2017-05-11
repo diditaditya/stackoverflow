@@ -7,12 +7,11 @@ let voteSchema = new Schema({
     answer: {type: Schema.Types.ObjectId, ref: 'Answer'},
     comment: {type: Schema.Types.ObjectId, ref: 'Comment'}
   },
-  user: {type: Schema.Types.ObjectId, ref: 'User'}
+  user: {type: Schema.Types.ObjectId, ref: 'User'},
   createdAt: Date,
-  upVote: Boolean,
-  downVote: Boolean
+  vote: String
 });
 
-let vote = mongoose.model('Vote', threadSchema);
+let vote = mongoose.model('Vote', voteSchema);
 
 module.exports = vote;

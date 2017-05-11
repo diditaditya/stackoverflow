@@ -24,6 +24,7 @@ let answerControl = {
       user: req.body.user,
       thread: req.body.thread,
       createdAt: new Date(),
+      voteCount: 0,
       content: req.body.content
     });
     newAnswer.save((err) => {
@@ -31,9 +32,9 @@ let answerControl = {
         console.log('error saving new answer');
       } else {
         let response = {
-          status = "success",
-          message = "answer is successfully created",
-          id = newAnswer._id
+          status:"success",
+          message: "answer is successfully created",
+          id: newAnswer._id
         };
         res.send(response);
       }
@@ -49,7 +50,8 @@ let answerControl = {
           createdAt: answer.createdAt,
           updatedAt: req.body.updatedAt || answer.updatedAt,
           content: req.body.content || thread.content,
-          votes: req.body.votes || answer.votes
+          votes: req.body.votes || answer.votes,
+          voteCount: req.body.voteCount || answer.voteCount
         }}, (err, updated) => {
           if (err) {
             console.log('error in answer update');
@@ -61,7 +63,7 @@ let answerControl = {
         });
       }
     });
-  }
+  },
   delete: function(req, res) {
     Answer.findByIdAndRemove(req.params.answerId, (err, answer) => {
       if(err) {

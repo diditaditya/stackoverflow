@@ -2,11 +2,29 @@ const Thread = require('../models/thread');
 
 let threadControl = {
   showAll: function(req, res) {
-    Thread.find({}).populate(['starter', 'votes']).exec((err, threads) => {
+    Thread.find({}).populate(['starter', 'votes', 'answers']).exec((err, threads) => {
       if(err) {
         res.send(err);
       } else {
-        res.send(threads);
+        let response = [];
+        threads.map((thread, index) => {
+          let threadData = {
+            id: thread._id,
+            starter: {
+              id: thread.starter._id,
+              username: thread.starter.username
+            },
+            title: thread.title,
+            createdAt: thread.createdAt,
+            updatedAt: thread.updatedAt,
+            openStatus: thread.openStatus,
+            voteCount: thread.voteCount,
+            tags: thread.tags,
+            answers: thread.answers.length
+          };
+          response.push(threadData);
+        });
+        res.send(response);
       }
     });
   },
@@ -27,6 +45,7 @@ let threadControl = {
       question: req.body.question,
       openStatus: true,
       closedBy: null,
+      voteCount: 0,
       tags: req.body.tags
     });
     newThread.save((err) => {
@@ -34,9 +53,9 @@ let threadControl = {
         console.log('error saving new thread');
       } else {
         let response = {
-          status = "success",
-          message = "thread is successfully created",
-          id = newThread._id
+          status: "success",
+          message: "thread is successfully created",
+          id: newThread._id
         };
         res.send(response);
       }
@@ -57,6 +76,7 @@ let threadControl = {
           question: req.body.question || thread.question,
           answers: req.body.answers || thread.answers,
           votes: req.body.votes || thread.votes,
+          voteCount: req.body.voteCount || thread.voteCount,
           tags: req.body.tags || thread.tags
         }}, (err, updated) => {
           if (err) {

@@ -7,6 +7,7 @@ let userSchema = new Schema({
   password: String,
   threads: [{type: Schema.Types.ObjectId, ref: 'Thread'}],
   answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
+  comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}]
 });
 

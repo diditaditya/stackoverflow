@@ -5,6 +5,7 @@ let answerSchema = new Schema({
   user: {type: Schema.Types.ObjectId, ref: 'User'},
   thread: {type: Schema.Types.ObjectId, ref: 'Thread'},
   votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}],
+  voteCount: Number,
   createdAt: Date,
   updatedAt: Date,
   content: String

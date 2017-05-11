@@ -11,6 +11,7 @@ let threadSchema = new Schema({
   question: String,
   answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
   votes: [{type: Schema.Types.ObjectId, ref: 'Vote'}],
+  voteCount: Number,
   tags: [String]
 });
 
