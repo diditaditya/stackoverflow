@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="padding-top: 50px">
+  <div class="container" style="padding-top: 25px">
     <table class="table">
       <tbody>
         <tr v-for="(thread, index) in threads">

@@ -27,6 +27,9 @@ passport.use('local-signin', new LocalStrategy(
               id: user._id,
               username: user.username,
               email: user.email,
+              threads: user.threads,
+              answers: user.answers,
+              votes: user.votes
             };
             let token = jwt.sign(userInfo, process.env.JWT_SECRET);
             let message = 'Sucessfully signed in';

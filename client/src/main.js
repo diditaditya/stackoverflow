@@ -7,7 +7,7 @@ import App from './App'
 import router from './router'
 import Navbar from "./components/Navbar"
 import ThreadList from "./components/ThreadList"
-import Login from "./components/Login"
+
 
 Vue.use(VueAxios, axios)
 

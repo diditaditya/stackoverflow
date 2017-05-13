@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <navbar :isloggedin="isloggedin" :logout="logout" :username="username"></navbar>
-    <router-view v-on:checkloggedin="checkloggedin" :isloggedin="isloggedin" v-on:dontShowThread="dontShowThread" v-on:showThread="showThread">
+    <navbar :isloggedin="isloggedin" :logout="logout" :user="user"></navbar>
+    <router-view v-on:checkloggedin="checkloggedin" :user="user" :isloggedin="isloggedin" v-on:dontShowThread="dontShowThread" v-on:showThread="showThread">
     </router-view>
     <thread-list :message="message" :threads="threads" v-if="showThreadList === true"></thread-list>
   </div>
@@ -10,6 +10,8 @@
 <script>
 import ThreadList from './components/ThreadList';
 import Navbar from './components/Navbar';
+import PostQuestion from "./components/PostQuestion";
+import Login from "./components/Login";
 
 export default {
   name: 'app',
@@ -18,9 +20,14 @@ export default {
     return {
       showThreadList: true,
       isloggedin: false,
-      id: '',
-      username: '',
-      email: ''
+      user: {
+        id: '',
+        username: '',
+        email: '',
+        threads: [],
+        comments: [],
+        votes: []
+      }
     }
   },
   methods: {
@@ -44,9 +51,12 @@ export default {
 
         axios.post(api, body)
           .then(function(response) {
-            self.username = response.data.username;
-            self.id = response.data.id;
-            self.email = response.data.email;
+            self.user.username = response.data.username;
+            self.user.id = response.data.id;
+            self.user.email = response.data.email;
+            self.user.threads = response.data.threads;
+            self.user.answers = response.data.answers;
+            self.user.votes = response.data.votes;
           })
           .catch(function(err) {
             console.log(err);

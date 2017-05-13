@@ -1,22 +1,34 @@
 <template>
-  <div class="hello container">
-    <h1><b>{{ msg }}</b></h1>
-    <h4><q>{{ quote }}</q> ~ Mitchell Kapor</h4>
-    <div v-if="isloggedin === false">
-      <h4>Join our growing community!</h4>
-      <router-link to="signup">
-        <button class="btn btn-primary">
-          Sign Up
-        </button>
-      </router-link>
+  <div class="container">
+    <div v-if="isloggedin === false" class="hello">
+      <h1><b>{{ msg }}</b></h1>
+      <h4><q>{{ quote }}</q> ~ Mitchell Kapor</h4>
+      <div>
+        <h4>Join our growing community!</h4>
+        <router-link to="signup">
+          <button class="btn btn-primary">
+            Sign Up
+          </button>
+        </router-link>
+      </div>
     </div>
-    <div v-else>
-      <h4>Take a look at the threads or post your own question</h4>
-      <router-link to="post">
-        <button class="btn btn-primary">
-          Post a Question
-        </button>
-      </router-link>
+    <div v-else class="container-fluid" style="margin-top: 25px">
+      <div class="row">
+        <div class="col-4 col-sm-4 col-md-4" style=""><h3>Threads List</h3></div>
+        <div class="col-4 col-sm-4 col-md-4" style="">
+          <form class="form-inline" style="margin-top: 15px">
+            <input class="form-control" type="text" placeholder="Search">
+            <input class="btn btn-default" type="submit" value="Search">
+          </form>
+        </div>
+        <div class="col-4 col-sm-4 col-md-4" style="margin-top: 15px">
+          <router-link to="postQuestion">
+            <button class="btn btn-primary">
+              Ask a Question
+            </button>
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>
