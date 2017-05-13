@@ -9,6 +9,7 @@ const passport = require('../helpers/passport');
 router.post('/signup', User.register);
 router.post('/signin', passport.authenticate('local-signin', {session: false}), User.signIn);
 router.get('/users', User.showAll);
+router.post('/users', User.checkJwt);
 router.get('/user/:id', User.showById);
 router.put('/user/:id', User.update);
 router.delete('/user/:id', User.delete);

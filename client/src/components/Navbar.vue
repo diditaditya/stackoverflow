@@ -27,6 +27,7 @@
       </div>
       <div class="navbar-right" v-else>
         <ul class="nav navbar-nav">
+          <li><a class="text-capitalize"><b>{{ username }}</b></a></li>
           <li><a href="#" v-on:click="logout">Log Out</a></li>
         </ul>
       </div>
@@ -37,7 +38,7 @@
 <script>
   export default {
     name: 'navbar',
-    props: ['isloggedin', 'logout'],
+    props: ['isloggedin', 'logout', 'username'],
     methods: {
 
     }

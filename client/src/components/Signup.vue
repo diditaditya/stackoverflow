@@ -16,7 +16,7 @@
         </form>
         <p style="color: red"> {{ message }} </p>
         <p></p>
-        <p>Already have an account? <a href="#">Sign in</a></p>
+        <p>Already have an account? <a href="#"><router-link to="login">Sign in</router-link></a></p>
 
       </div>
       </div class="col-md-4">
@@ -38,6 +38,9 @@ export default {
     }
   },
   methods: {
+    dontShowThread: function() {
+      this.$emit("dontShowThread");
+    },
     isUsernameValid: function(username) {
       if(username.length < 3) {
         this.message = 'username is too short';
@@ -97,6 +100,9 @@ export default {
         this.message = 'username, email, and password may not be empty';
       }
     }
+  },
+  mounted: function() {
+    this.dontShowThread();
   }
 }
 </script>

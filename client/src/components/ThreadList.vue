@@ -2,7 +2,7 @@
   <div class="container" style="padding-top: 50px">
     <table class="table">
       <tbody>
-        <tr v-for="thread in threads">
+        <tr v-for="(thread, index) in threads">
           <td>
             <button class="btn btn-default center">
               <span class="badge">{{ thread.voteCount }}</span> Votes

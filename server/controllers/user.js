@@ -3,6 +3,7 @@ const Thread = require('../models/thread');
 const Vote = require('../models/vote');
 const bcrypt = require('bcrypt');
 let saltRounds = 10;
+const JWTCheck = require('../helpers/jwtCheck');
 
 let userControl = {
   showAll: function(req, res) {
@@ -125,6 +126,17 @@ let userControl = {
     } else {
       res.send('error');
     }
+  },
+  checkJwt: function(req, res) {
+    let token = req.headers['x-access-token'] || req.body.token;
+    JWTCheck(token, function(data) {
+      if(data) {
+        res.send(data);
+      } else {
+        res.send(err);
+      }
+    })
+
   }
 }
 

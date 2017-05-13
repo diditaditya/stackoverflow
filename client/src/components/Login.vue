@@ -33,9 +33,8 @@ export default {
     }
   },
   methods: {
-    test: function() {
-      alert('in the Login.vue test!');
-      this.$emit("test");
+    dontShowThread: function() {
+      this.$emit("dontShowThread");
     },
     signin: function() {
 
@@ -53,7 +52,9 @@ export default {
         console.log(response.data);
         if(response.data.status === "success") {
           localStorage.setItem('token', response.data.token);
-          self.checkloggedin();
+          self.username = response.data.user.username;
+          self.checkloggedin(self.username);
+          self.$router.push('/');
         } else {
           self.message = response.data.message;
         }
@@ -66,10 +67,11 @@ export default {
     checkloggedin: function() {
       if(localStorage.getItem('token')) {
         this.isloggedin = true;
+        this.$emit("checkloggedin");
       } else {
         this.isloggedin = false;
       }
-      this.$emit("checkloggedin");
+
     }
   },
   created: function() {
@@ -78,6 +80,7 @@ export default {
     }
   },
   mounted: function() {
+    this.dontShowThread();
     console.log('in Login.vue mounted');
     if(localStorage.getItem('token')) {
       this.isloggedin = true;
