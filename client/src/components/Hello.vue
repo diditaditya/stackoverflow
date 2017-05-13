@@ -3,7 +3,11 @@
     <h1><b>{{ msg }}</b></h1>
     <h4><q>{{ quote }}</q> ~ Mitchell Kapor</h4>
     <h4>Join our growing community!</h4>
-    <button class="btn btn-primary">Sign Up</button>
+    <router-link to="signup">
+      <button class="btn btn-primary">
+        Sign Up
+      </button>
+    </router-link>    
   </div>
 </template>
 
