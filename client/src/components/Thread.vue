@@ -11,7 +11,10 @@
             <p>{{ threads2[index].question }}</p>
           </div>
           <div v-if="authorization === 'starter'" class="row text-right" style="margin: 10px">
-            <button class="btn btn-warning">Edit Question</button>
+            <textarea v-if="showEditQuestion === true" v-model="edittedQuestion" id="answer" rows="7" class="form-control" style="margin-bottom: 10px"></textarea>
+            <button v-if="showEditQuestion === true" v-on:click="closeEditQuestion" class="btn btn-info">Cancel</button>
+            <button v-if="showEditQuestion === false" v-on:click="showEditFormQuestion" class="btn btn-warning">Edit Question</button>
+            <button v-if="showEditQuestion === true" v-on:click="editQuestion" class="btn btn-warning">Edit Question</button>
             <button v-on:click="deleteQuestion" class="btn btn-danger">Delete Question</button>
           </div>
         </div>
@@ -21,8 +24,6 @@
           <p>at {{ convertTime(threads2[index].createdAt) }}</p>
         </div>
       </div>
-
-
 
       <div class="container" style="margin-top: 25px">
         <div v-for="(answer, index) in answers" class="row">
@@ -87,7 +88,9 @@ export default {
     return {
       index: this.$route.params.index,
       authorization: '',
-      newAnswer : ''
+      newAnswer : '',
+      showEditQuestion: false,
+      edittedQuestion : ''
     }
   },
   methods: {
@@ -247,10 +250,6 @@ export default {
             axios.put(url, body)
               .then(function(response) {
                 console.log(response);
-                //console.log('before: ', self.$store.state.threads2[self.index].answers);
-                //console.log('deleted index ', index);
-                //self.$store.state.threads2[self.index].answers.splice(index, 1);
-                //console.log('after: ', self.$store.state.threads2[self.index].answers);
               })
               .catch(function(err) {
                 console.log(err);
@@ -260,6 +259,37 @@ export default {
             console.log(err);
           });
       }
+    },
+    editQuestion: function() {
+
+      let threadId = this.threads2[this.index].id;
+      let body = {
+        question: this.edittedQuestion,
+        updatedAt: new Date()
+      };
+      let api = "http://localhost:3000/thread/" + threadId;
+      let self = this;
+      axios.put(api, body)
+        .then(function(response) {
+          if(response.data.status === "success") {
+            console.log(response);
+            self.$store.state.threads2[self.index].question = self.edittedQuestion;
+            self.closeEditQuestion();
+          } else {
+            console.log(response);
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+
+    },
+    closeEditQuestion: function() {
+      this.showEditQuestion = false;
+    },
+    showEditFormQuestion: function() {
+      this.showEditQuestion = true;
+      this.edittedQuestion = this.threads2[this.index].question;
     }
   },
   created: function() {

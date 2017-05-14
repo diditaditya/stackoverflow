@@ -87,7 +87,11 @@ let threadControl = {
             res.send(err);
           } else {
             console.log('thread is updated');
-            res.send(updated);
+            let response = {
+              status: 'success',
+              thread: thread
+            }
+            res.send(response);
           }
         });
       }
