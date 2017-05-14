@@ -1,8 +1,9 @@
 const Thread = require('../models/thread');
+const Relation = require('../helpers/relation');
 
 let threadControl = {
   showAll: function(req, res) {
-    Thread.find({}).populate(['starter', 'votes', 'answers']).exec((err, threads) => {
+    Thread.find({}).populate(['starter', 'votes', 'answers', 'answers.user']).exec((err, threads) => {
       if(err) {
         res.send(err);
       } else {
@@ -15,12 +16,13 @@ let threadControl = {
               username: thread.starter.username
             },
             title: thread.title,
+            question: thread.question,
             createdAt: thread.createdAt,
             updatedAt: thread.updatedAt,
             openStatus: thread.openStatus,
             voteCount: thread.voteCount,
             tags: thread.tags,
-            answers: thread.answers.length
+            answers: thread.answers
           };
           response.push(threadData);
         });
@@ -55,7 +57,8 @@ let threadControl = {
         let response = {
           status: "success",
           message: "thread is successfully created",
-          id: newThread._id
+          id: newThread._id,
+          thread: newThread
         };
         res.send(response);
       }

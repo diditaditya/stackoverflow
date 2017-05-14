@@ -11,6 +11,9 @@ let userControl = {
       if(err) {
         res.send(err);
       } else {
+        users.forEach((user) => {
+          user.password = '';
+        });
         res.send(users);
       }
     });
@@ -46,7 +49,12 @@ let userControl = {
             res.send(err);
           } else {
             console.log('local user is updated');
-            res.send(updated);
+            let response = {
+              status: 'success',
+              message: 'user has been successfully updated',
+              updated: updated
+            };
+            res.send(response);
           }
         });
       }

@@ -49,11 +49,11 @@ export default {
       let self = this;
 
       this.axios.post(api, body).then(function(response) {
-        console.log(response.data);
         if(response.data.status === "success") {
           localStorage.setItem('token', response.data.token);
           self.username = response.data.user.username;
           self.checkloggedin(self.username);
+          self.$store.state.currentUser = response.data.user;
           self.$router.push('/');
         } else {
           self.message = response.data.message;

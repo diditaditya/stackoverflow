@@ -4,15 +4,17 @@
       <tbody>
         <tr v-for="(thread, index) in threads">
           <td>
-            <button class="btn btn-default center">
+            <div class="btn btn-default center">
               <span class="badge">{{ thread.voteCount }}</span> Votes
-            </button>
-            <button class="btn btn-default center">
-              <span class="badge">{{ thread.answers }}</span> Answers
-            </button>
+            </div>
+            <div class="btn btn-default center">
+              <span class="badge">{{ thread.answers.length }}</span> Answers
+            </div>
           </td>
           <td>
-            <a href="#" class="text-left"><h4>{{ thread.title }}</h4></a>
+            <router-link :to="{path:'/thread/'+index, params:{index: index}}" v-on:click.native="dontShowThreadList">
+              <a href="#" class="text-left"><h4>{{ thread.title }}</h4></a>
+            </router-link>
             <p>{{ thread.starter.username }}</p>
           </td>
           <td></td>
@@ -23,12 +25,21 @@
 </template>
 
 <script>
+import Thread from "./Thread";
+
 export default {
   name: 'ThreadList',
   props: ['threads', 'message'],
   data () {
-    return {}
+    return {
+
     }
+  },
+  methods: {
+    dontShowThreadList: function() {
+      this.$emit('dontShowThreadList');
+    }
+  }
 }
 </script>
 

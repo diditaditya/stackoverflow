@@ -8,6 +8,6 @@ let commentSchema = new Schema({
   content: String
 });
 
-let comment = mongoose.model('Comment', threadSchema);
+let comment = mongoose.model('Comment', commentSchema);
 
 module.exports = comment;

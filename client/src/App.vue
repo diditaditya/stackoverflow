@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <navbar :isloggedin="isloggedin" :logout="logout" :user="user"></navbar>
-    <router-view v-on:checkloggedin="checkloggedin" :user="user" :isloggedin="isloggedin" v-on:dontShowThread="dontShowThread" v-on:showThread="showThread">
+    <router-view v-on:checkloggedin="checkloggedin" :user="user" :isloggedin="isloggedin" v-on:dontShowThread="dontShowThread" v-on:showThread="showThread" v-on:postQuestion="appendThread" :threads="threads">
     </router-view>
-    <thread-list :message="message" :threads="threads" v-if="showThreadList === true"></thread-list>
+    <thread-list :message="message" :threads="threads" v-if="showThreadList === true" v-on:dontShowThreadList="dontShowThread"></thread-list>
   </div>
 </template>
 
@@ -12,10 +12,16 @@ import ThreadList from './components/ThreadList';
 import Navbar from './components/Navbar';
 import PostQuestion from "./components/PostQuestion";
 import Login from "./components/Login";
+import Thread from "./components/Thread";
 
 export default {
   name: 'app',
   props: ['message', 'threads', 'loggedin'],
+  computed: {
+    threads2() {
+      return this.$store.state.threads;
+    }
+  },
   data: function() {
     return {
       showThreadList: true,
@@ -38,7 +44,6 @@ export default {
       this.showThreadList = true;
     },
     checkloggedin: function() {
-      console.log('in App.vue checkloggedin');
       if(localStorage.getItem('token')) {
         this.isloggedin = true;
 
@@ -65,29 +70,27 @@ export default {
       } else {
         this.isloggedin = false;
       }
-      console.log('is user logged in? ', this.isloggedin);
       this.$emit("checkloggedin");
     },
     logout: function() {
       localStorage.clear();
+      this.$store.state.currentUser = {};
       this.isloggedin = false;
+    },
+    appendThread: function(newThread) {
+      console.log(newThread);
+      this.$emit('appendThread', newThread);
     }
   },
   components: {
     ThreadList, Navbar
   },
   created: function() {
-    console.log('in App.vue created');
     this.showThreadList = true;
     this.checkloggedin();
-    console.log('username: ', this.username);
   },
-  beforeMount: function() {
-    console.log('in App.vue beforeMount');
-  },
-  mounted: function() {
-    console.log('in App.vue mounted');
-  }
+  beforeMount: function() {},
+  mounted: function() {}
 }
 </script>
 

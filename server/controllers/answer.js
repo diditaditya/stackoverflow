@@ -31,10 +31,11 @@ let answerControl = {
       if(err) {
         console.log('error saving new answer');
       } else {
+        console.log('answer is successfully created');
         let response = {
           status:"success",
           message: "answer is successfully created",
-          id: newAnswer._id
+          answer: newAnswer
         };
         res.send(response);
       }

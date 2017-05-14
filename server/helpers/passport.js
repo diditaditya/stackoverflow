@@ -15,8 +15,6 @@ passport.use('local-signin', new LocalStrategy(
         return done(null, {status: 'failed', message: 'Username is not found'});
       }
       if(user) {
-        console.log('given password: ', password);
-        console.log('stored password: ', user.password);
         bcrypt.compare(password, user.password, function(err, res) {
           console.log('res: ', res);
           if(err) {
@@ -31,7 +29,7 @@ passport.use('local-signin', new LocalStrategy(
               answers: user.answers,
               votes: user.votes
             };
-            let token = jwt.sign(userInfo, process.env.JWT_SECRET);
+            let token = jwt.sign(userInfo, process.env.JWT_SECRET, {expiresIn: '6h'});
             let message = 'Sucessfully signed in';
             return done(null, {status: 'success', message: message, user: userInfo, token: token});
           } else {

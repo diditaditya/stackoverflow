@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import Login from '@/components/Login'
 import Signup from '@/components/Signup'
 import PostQuestion from '@/components/PostQuestion'
+import Thread from '@/components/Thread'
 
 Vue.use(Router)
 
@@ -17,8 +18,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login,
-      props: {isloggedin: true}
+      component: Login
     },
     {
       path: '/signup',
@@ -28,8 +28,13 @@ export default new Router({
     {
       path: '/postQuestion',
       name: 'PostQuestion',
-      component: PostQuestion,
-      props: {isloggedin: true}
+      component: PostQuestion
+    },
+    {
+      path: '/thread/:index',
+      name: 'Thread',
+      component: Thread,
+      props: true
     }
   ]
 })
