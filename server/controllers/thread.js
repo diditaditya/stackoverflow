@@ -20,6 +20,7 @@ let threadControl = {
             createdAt: thread.createdAt,
             updatedAt: thread.updatedAt,
             openStatus: thread.openStatus,
+            votes: thread.votes,
             voteCount: thread.voteCount,
             tags: thread.tags,
             answers: thread.answers
@@ -40,29 +41,38 @@ let threadControl = {
     });
   },
   create: function(req, res) {
-    let newThread = new Thread({
-      starter: req.body.starter,
-      createdAt: new Date(),
-      title: req.body.title,
-      question: req.body.question,
-      openStatus: true,
-      closedBy: null,
-      voteCount: 0,
-      tags: req.body.tags
-    });
-    newThread.save((err) => {
-      if(err) {
-        console.log('error saving new thread');
-      } else {
-        let response = {
-          status: "success",
-          message: "thread is successfully created",
-          id: newThread._id,
-          thread: newThread
-        };
-        res.send(response);
-      }
-    });
+    if(req.body.title && req.body.question) {
+      let newThread = new Thread({
+        starter: req.body.starter,
+        createdAt: new Date(),
+        title: req.body.title,
+        question: req.body.question,
+        openStatus: true,
+        closedBy: null,
+        votes: [],
+        voteCount: 0,
+        tags: req.body.tags
+      });
+      newThread.save((err) => {
+        if(err) {
+          console.log('error saving new thread');
+        } else {
+          let response = {
+            status: "success",
+            message: "thread is successfully created",
+            id: newThread._id,
+            thread: newThread
+          };
+          res.send(response);
+        }
+      });
+    } else {
+      let response = {
+        status: 'failed',
+        message: 'title and question are required'
+      };
+      res.send(response);
+    }
   },
   update: function(req, res) {
     Thread.findById(req.params.threadId, (err, thread) => {
@@ -72,7 +82,7 @@ let threadControl = {
         Thread.update({_id: req.params.threadId}, {$set:{
           starter: thread.starter,
           createdAt: thread.createdAt,
-          updatedAt: req.body.updatedAt || thread.updatedAt,
+          updatedAt: new Date(),
           openStatus: thread.openStatus,
           closedBy: thread.closedBy,
           title: req.body.title || thread.title,

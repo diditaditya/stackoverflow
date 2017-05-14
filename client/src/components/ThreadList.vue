@@ -2,20 +2,23 @@
   <div class="container" style="padding-top: 25px">
     <table class="table">
       <tbody>
-        <tr v-for="(thread, index) in threads">
+        <tr v-for="(thread, index) in threads2">
           <td>
-            <div class="btn btn-default center">
-              <span class="badge">{{ thread.voteCount }}</span> Votes
-            </div>
-            <div class="btn btn-default center">
-              <span class="badge">{{ thread.answers.length }}</span> Answers
+            <div style="margin-top: 10px">
+              <div class="center label label-info">
+                <span class="badge">{{ thread.voteCount }}</span> Votes
+              </div>
+              <div class="center label label-info">
+                <span class="badge">{{ thread.answers.length }}</span> Answers
+              </div>
             </div>
           </td>
           <td>
             <router-link :to="{path:'/thread/'+index, params:{index: index}}" v-on:click.native="dontShowThreadList">
               <a href="#" class="text-left"><h4>{{ thread.title }}</h4></a>
             </router-link>
-            <p>{{ thread.starter.username }}</p>
+            <span class="text-left">at {{ convertTime(thread.createdAt) }}</span>
+            <span>by <b>{{ thread.starter.username }}</b></span>
           </td>
           <td></td>
         </tr>
@@ -30,6 +33,11 @@ import Thread from "./Thread";
 export default {
   name: 'ThreadList',
   props: ['threads', 'message'],
+  computed: {
+    threads2: function() {
+      return this.$store.getters.threads2;
+    }
+  },
   data () {
     return {
 
@@ -38,6 +46,17 @@ export default {
   methods: {
     dontShowThreadList: function() {
       this.$emit('dontShowThreadList');
+    },
+    convertTime: function(time) {
+      let oriTime = new Date(time);
+      let year = oriTime.getFullYear();
+      let month = oriTime.getMonth() + 1;
+      let date = oriTime.getDate();
+      let hour = oriTime.getHours();
+      let minute = oriTime.getMinutes();
+      let second = oriTime.getSeconds();
+
+      return `${year}-${month}-${date} ${hour}:${minute}:${second}`
     }
   }
 }
@@ -46,7 +65,15 @@ export default {
 <style scoped>
 
 .center {
+  font-size: 1em;
   vertical-align: middle;
+  padding: 10px;
+  border-radius: 25px;
+  margin-right: 10px;
+}
+
+.badge {
+  background-color: black;
 }
 
 </style>

@@ -24,6 +24,7 @@ let answerControl = {
       user: req.body.user,
       thread: req.body.thread,
       createdAt: new Date(),
+      votes: [],
       voteCount: 0,
       content: req.body.content
     });

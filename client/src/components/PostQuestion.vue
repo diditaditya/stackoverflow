@@ -36,7 +36,7 @@ export default {
         starter: '',
         title: '',
         question: '',
-        tags: [],
+        tags: '',
       },
       message: ''
     }
@@ -77,11 +77,21 @@ export default {
     postQuestion: function() {
 
       if(this.thread.title && this.thread.question) {
+
+        let tags = this.thread.tags;
+        if(tags) {
+          tags = tags.split(" ");
+        } else {
+          tags = [];
+        }
+
         let body = {
           starter: this.user.id,
           title: this.thread.title,
           question: this.thread.question,
-          tags: this.thread.tags
+          votes: [],
+          voteCount: 0,
+          tags: tags
         };
 
         let self = this;
@@ -101,6 +111,7 @@ export default {
               createdAt: response.data.thread.createdAt,
               updatedAt: response.data.thread.updatedAt,
               voteCount: response.data.thread.voteCount,
+              votes: response.data.thread.votes,
               tags: response.data.thread.tags,
               answers: response.data.thread.answers
             };
@@ -114,6 +125,7 @@ export default {
                 .then(function(response) {
                   console.log(response.data);
                   self.$emit('postQuestion', newThread);
+                  self.$store.state.threads2.push(newThread);
                   self.$router.push("/");
                 })
                 .catch(function(err) {

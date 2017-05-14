@@ -11,14 +11,14 @@
         <ul class="nav navbar-nav">
           <li>
             <a href="#">
-              <router-link to="login">
+              <router-link to="/login">
                 Log In
               </router-link>
             </a>
           </li>
           <li>
             <a href="#">
-              <router-link to="signup">
+              <router-link to="/signup">
                 Sign Up
               </router-link>
             </a>

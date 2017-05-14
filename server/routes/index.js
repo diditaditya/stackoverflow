@@ -3,6 +3,7 @@ const router = express.Router();
 const Thread = require('../controllers/thread');
 const User = require('../controllers/user');
 const Answer = require('../controllers/answer');
+const Vote = require('../controllers/vote');
 const passport = require('../helpers/passport');
 
 // User routes
@@ -27,5 +28,12 @@ router.post('/answers', Answer.create);
 router.get('/answer/:answerId', Answer.showById);
 router.put('/answer/:answerId', Answer.update);
 router.delete('/answer/:answerId', Answer.delete);
+
+// Vote routes
+router.get('/votes', Vote.showAll);
+router.post('/votes', Vote.create);
+router.get('/vote/:voteId', Vote.showById);
+router.put('/vote/:voteId', Vote.update);
+router.delete('/vote/:voteId', Vote.delete);
 
 module.exports = router;

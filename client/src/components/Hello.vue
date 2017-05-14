@@ -16,10 +16,10 @@
       <div class="row">
         <div class="col-4 col-sm-4 col-md-4" style=""><h3>Threads List</h3></div>
         <div class="col-4 col-sm-4 col-md-4" style="">
-          <form class="form-inline" style="margin-top: 15px">
+          <!-- <form class="form-inline" style="margin-top: 15px">
             <input class="form-control" type="text" placeholder="Search">
             <input class="btn btn-default" type="submit" value="Search">
-          </form>
+          </form> -->
         </div>
         <div class="col-4 col-sm-4 col-md-4" style="margin-top: 15px">
           <router-link to="postQuestion">

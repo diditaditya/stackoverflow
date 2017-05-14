@@ -32,17 +32,23 @@ new Vue({
       alert('in Main.js test method!');
     },
     fetchThreads: function() {
-      let self = this;
-      let url = "http://localhost:3000/threads";
-      axios.get(url)
-        .then(function(response) {
-          console.log(response);
-          self.threads = response.data;
-          self.$store.state.threads2 = response.data;
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
+      this.$store.dispatch('fetchThreads');
+      // let self = this;
+      // let url = "http://localhost:3000/threads";
+      // axios.get(url)
+      //   .then(function(response) {
+      //     console.log(response);
+      //     self.threads = response.data;
+      //     self.$store.state.threads2 = response.data;
+      //     self.$store.state.threads2.map(function(thread) {
+      //       thread.answers.map(function(answer) {
+      //         return answer.showEditAnswer = false;
+      //       });
+      //     });
+      //   })
+      //   .catch(function(err) {
+      //     console.log(err);
+      //   });
     },
     fetchUsers: function() {
       let self = this;

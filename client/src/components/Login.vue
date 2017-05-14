@@ -38,30 +38,33 @@ export default {
     },
     signin: function() {
 
-      console.log('in Login.vue signin method')
+      if(this.username && this.password) {
+        let api = 'http://localhost:3000/signin';
+        let body = {
+          username: this.username,
+          password: this.password
+        };
 
-      let api = 'http://localhost:3000/signin';
-      let body = {
-        username: this.username,
-        password: this.password
-      };
+        let self = this;
 
-      let self = this;
+        this.axios.post(api, body).then(function(response) {
+          if(response.data.status === "success") {
+            localStorage.setItem('token', response.data.token);
+            self.username = response.data.user.username;
+            self.checkloggedin(self.username);
+            self.$store.state.currentUser = response.data.user;
+            self.$router.push('/');
+          } else {
+            self.message = response.data.message;
+          }
 
-      this.axios.post(api, body).then(function(response) {
-        if(response.data.status === "success") {
-          localStorage.setItem('token', response.data.token);
-          self.username = response.data.user.username;
-          self.checkloggedin(self.username);
-          self.$store.state.currentUser = response.data.user;
-          self.$router.push('/');
-        } else {
-          self.message = response.data.message;
-        }
+        }).catch(function(err) {
+          console.log(err);
+        });
+      } else {
+        this.message = "Username and password are required"
+      }
 
-      }).catch(function(err) {
-        console.log(err);
-      });
 
     },
     checkloggedin: function() {
