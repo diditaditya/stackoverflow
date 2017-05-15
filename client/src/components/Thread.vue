@@ -21,7 +21,7 @@
               <span v-for="tag in threads2[index].tags" style="margin-left: 5px; display: inline">
                 <span class="tag">{{ tag }}</span>
               </span>
-              <h6 v-if="threads2[index].updatedAt">updated at:{{ convertTime(threads2[index].updatedAt) }}</h6>
+              <!-- <h6 v-if="threads2[index].updatedAt">updated at:{{ convertTime(threads2[index].updatedAt) }}</h6> -->
             </div>
           </div>
           <div v-if="authorization === 'starter'" class="row text-right" style="margin: 10px">
@@ -44,9 +44,9 @@
           <div class="row">
             <div class="col-md-3">
               <div class="row" style="margin-top: 15px">
-                <!-- <span class="glyphicon glyphicon-chevron-up text-center" style="font-size: 1.5em" title="useful answer; clear"></span>
-                <span style="font-size: 1.5em">{{ answer.votes.length }}</span>
-                <span class="glyphicon glyphicon-chevron-down text-center" style="font-size: 1.5em" title="not answering anything; unclear"></span> -->
+                <!-- <span v-if="checkIfHasVotedAnswer(index)" v-on:click="voteAnswerUp(index)" class="glyphicon glyphicon-chevron-up text-center" style="font-size: 1.5em" title="useful answer; clear"></span>
+                <span style="font-size: 1.5em">{{ answer.voteCount }}</span>
+                <span v-if="checkIfHasVotedAnswer(index)" v-on:click="voteAnswerDown(index)" class="glyphicon glyphicon-chevron-down text-center" style="font-size: 1.5em" title="not answering anything; unclear"></span> -->
               </div>
             </div>
             <div class="col-md-6 text-left" style="margin-top: 25px; min-height: 100px; border-bottom: 1px solid grey">
@@ -368,7 +368,6 @@ export default {
       } else {
         alert('You must sign in first before voting!');
       }
-
     },
     voteQuestionDown: function() {
       if(localStorage.getItem('token')) {
@@ -426,6 +425,110 @@ export default {
           self.hasVotedQuestion = true;
         }
       });
+    },
+    checkIfHasVotedAnswer: function(index) {
+      let self = this;
+      this.answers[index].votes.forEach(function(vote) {
+        if(vote.user === self.currentUser.id) {
+          console.log('question user vote: ', vote.user);
+          console.log('he has voted!');
+          self.answer[index].hasVotedQuestion = true;
+        }
+      });
+    },
+    checkHasVotedForAllAnswer: function() {
+      let self = this;
+      for(let i = 0; i < self.answers.length; i++) {
+        self.checkIfHasVotedAnswer(i);
+      }
+    },
+    voteAnswerUp: function(index) {
+      if(localStorage.getItem('token')) {
+        let userId = this.currentUser.id;
+        let answerId = this.answers[index].id;
+        let createVoteBody = {
+          userId: userId,
+          parent: {answer: answerId},
+          vote: "up"
+        };
+        let self = this;
+        let url = 'http://localhost:3000/votes';
+        axios.post(url, createVoteBody)
+          .then(function(response) {
+            if(response.data.status === "success") {
+              let newVote = response.data.vote;
+              let url = 'http://localhost:3000/answer/' + answerId;
+              let votes = self.answers[index].votes;
+              votes.push(newVote._id);
+              let voteCount = self.answers[index].voteCount;
+              let updateAnswerBody = {
+                votes: votes,
+                voteCount: voteCount + 1
+              };
+              axios.put(url, updateAnswerBody)
+                .then(function(response) {
+                  self.$store.state.threads2[self.index].answers[index].votes.push(newVote);
+                  self.$store.state.threads2[self.index].answers[index].voteCount += 1;
+                  self.answers[index].hasVotedAnswer = true;
+                  console.log(response.data);
+                })
+                .catch(function(err) {
+                  console.log(err);
+                });
+            } else {
+              console.log(response.data);
+            }
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      } else {
+        alert('You must sign in first before voting!');
+      }
+    },
+    voteAnswerDown: function(index) {
+      if(localStorage.getItem('token')) {
+        let userId = this.currentUser.id;
+        let answerId = this.answers[index].id;
+        let createVoteBody = {
+          userId: userId,
+          parent: {answer: answerId},
+          vote: "down"
+        };
+        let self = this;
+        let url = 'http://localhost:3000/votes';
+        axios.post(url, createVoteBody)
+          .then(function(response) {
+            if(response.data.status === "success") {
+              let newVote = response.data.vote;
+              let url = 'http://localhost:3000/answer/' + answerId;
+              let votes = self.answers[index].votes;
+              votes.push(newVote._id);
+              let voteCount = self.answers[index].voteCount;
+              let updateAnswerBody = {
+                votes: votes,
+                voteCount: voteCount - 1
+              };
+              axios.put(url, updateAnswerBody)
+                .then(function(response) {
+                  self.$store.state.threads2[self.index].answers[index].votes.push(newVote);
+                  self.$store.state.threads2[self.index].answers[index].voteCount -= 1;
+                  self.answers[index].hasVotedAnswer = true;
+                  console.log(response.data);
+                })
+                .catch(function(err) {
+                  console.log(err);
+                });
+            } else {
+              console.log(response.data);
+            }
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      } else {
+        alert('You must sign in first before voting!');
+      }
     }
   },
   created: function() {
@@ -436,6 +539,13 @@ export default {
   },
   mounted: function() {
     this.checkAuth();
+    this.thread2.answers.map(function(answer) {
+      answer.showEditAnswer = false;
+    });
+    this.answers.map(function(answer) {
+      answer.hasVotedAnswer = false;
+    });
+    // this.checkHasVotedForAllAnswer();
   }
 }
 </script>
