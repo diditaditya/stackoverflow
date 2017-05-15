@@ -14,7 +14,7 @@
     </div>
     <div v-else class="container-fluid" style="margin-top: 25px">
       <div class="row">
-        <div class="col-4 col-sm-4 col-md-4" style=""><h3>Threads List</h3></div>
+        <div class="col-4 col-sm-4 col-md-4" style=""><h3>Thread List</h3></div>
         <div class="col-4 col-sm-4 col-md-4" style="">
           <!-- <form class="form-inline" style="margin-top: 15px">
             <input class="form-control" type="text" placeholder="Search">

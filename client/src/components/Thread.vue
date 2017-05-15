@@ -72,11 +72,14 @@
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6 text-left">
-            <form v-on:submit.prevent="postAnswer" class="form-group">
+            <form v-if="isloggedin" v-on:submit.prevent="postAnswer" class="form-group">
               <label for="answer">Share your answer or reply?</label>
               <textarea v-model="newAnswer" id="answer" rows="7" class="form-control" placeholder="Your answer here" value=""></textarea>
               <input class="btn btn-primary" type="submit" style="margin-top: 10px" value="Post your Reply">
             </form>
+            <div v-else class="">
+              <p>Please <router-link to="/login"> <a href="#">sign in</a> </router-link> to answer the question.</p>
+            </div>
           </div>
           <div class="col-md-3"></div>
         </div>
@@ -110,6 +113,7 @@ export default {
   data: function() {
     return {
       index: this.$route.params.index,
+      isloggedin: false,
       authorization: '',
       hasVotedQuestion: false,
       newAnswer : '',

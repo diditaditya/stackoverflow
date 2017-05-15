@@ -11,8 +11,9 @@
           <label for="password" class="text-left" style="margin-top: 5px">Password</label>
           <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
           <input type="submit" class="btn btn-primary padded" style="margin-top: 10px" value="Sign in">
+          <span style="float: right; margin-top: 20px">Need an account? <router-link to="/signup"><a href="#">Sign up</a></router-link></span>
         </form>
-        <p>{{ message }} </p>
+        <p style="color: red">{{ message }} </p>
       </div>
       </div class="col-md-4">
       </div>

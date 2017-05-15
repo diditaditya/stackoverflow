@@ -13,10 +13,11 @@
           <label for="password" class="text-left" style="margin-top: 5px">Password</label>
           <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
           <input type="submit" class="btn btn-primary padded" style="margin-top: 10px" value="Sign up">
+          <span style="float: right; margin-top: 20px">Already have an account? <a href="#"><router-link to="login">Sign in</router-link></a></span>
         </form>
         <p style="color: red"> {{ message }} </p>
         <p></p>
-        <p>Already have an account? <a href="#"><router-link to="login">Sign in</router-link></a></p>
+
 
       </div>
       </div class="col-md-4">
